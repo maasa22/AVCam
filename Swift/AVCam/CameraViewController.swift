@@ -113,6 +113,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         }
         counter = counter + 1;
         
+        
 //        if counter % 8 == 0{
 //            colorView.backgroundColor=blue_color
 //            self.view.backgroundColor=blue_color
