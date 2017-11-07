@@ -105,6 +105,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         }
         if counter % 8 == 1{
             colorView.backgroundColor=red_color
+            ////autoTapButton()
             //self.view.backgroundColor=red_color
         }
         if counter % 8 == 2{
@@ -131,9 +132,17 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
             //self.view.backgroundColor=UIColor.purple
             colorView.backgroundColor=color1
         }
+        autoTapButton()
         counter = counter + 1;
         counter = counter % 40 //こうしたら，メモリ食わずに済む?
     }
+    
+    func autoTapButton() {
+        // 何か処理を行う
+            // ボタンタップイベントを発生させる
+            self.capturePhoto(photoButton)
+    }
+    
     
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
