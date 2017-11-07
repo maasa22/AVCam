@@ -13,18 +13,23 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
 	// MARK: View Controller Life Cycle
 	
     var timer: Timer!
-    var counter: Int8  = 0;
+    //var counter: Int8  = 0;
+    var counter = 0
     let black_color    = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0)
     let gray_color      = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
     let white_color     = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     let red_color       = UIColor(red: 1.0, green: 0, blue: 0, alpha: 1.0)
     let blue_color        = UIColor(red: 0, green: 0, blue: 1.0, alpha: 1.0)
+    let green_color = UIColor(red: 0, green: 1.0, blue: 1.0, alpha: 1.0)
     let yellow_color      = UIColor(red: 1.0, green: 1.0, blue: 0, alpha: 1.0)
-    let color1    = UIColor(red: 1.0, green: 0, blue: 1.0, alpha: 1.0) //purple1_color
-    let color2     = UIColor(red: 1.0, green: 0, blue: 1.0, alpha: 0.5) //purple2_color
-    let color3    = UIColor(red: 1.0, green: 0, blue: 1.0, alpha: 0.2) //purple3_color
+    let cyan_color = UIColor(red: 0, green: 1.0, blue: 1.0, alpha: 1.0)
+    let magenta_color = UIColor(red: 1.0, green: 0, blue: 1.0, alpha: 1.0)
+    let purple1_color    = UIColor(red: 1.0, green: 0, blue: 1.0, alpha: 1.0) //purple1_color
+    let purple2_color    = UIColor(red: 1.0, green: 0, blue: 1.0, alpha: 0.5) //purple2_color
+    let purple3_color    = UIColor(red: 1.0, green: 0, blue: 1.0, alpha: 0.2) //purple3_color
     
-    
+    lazy var colorArray: [UIColor] = [black_color, white_color, red_color, green_color, blue_color,
+                                      cyan_color, magenta_color, yellow_color]
     
     @IBOutlet weak var colorView: UIView!
     
@@ -98,49 +103,27 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     ////
     @objc func update(tm: Timer) {
         // do something
-        
-        if counter % 8 == 0{
-            colorView.backgroundColor=blue_color
-            self.view.backgroundColor=blue_color
+        for i in 0..<8 {
+            if counter % 8 == i{
+                colorView.backgroundColor=colorArray[i]
+            }
         }
-        if counter % 8 == 1{
-            colorView.backgroundColor=red_color
-            ////autoTapButton()
-            //self.view.backgroundColor=red_color
+        if counter >= 9 && counter < 17{
+            autoTapButton() //この時だけ写真撮る．
         }
-        if counter % 8 == 2{
-            colorView.backgroundColor=yellow_color
-            //self.view.backgroundColor=yellow_color
-        }
-        if counter % 8 == 3{
-            colorView.backgroundColor=white_color
-            //self.view.backgroundColor=white_color
-        }
-        if counter % 8 == 4{
-            //self.view.backgroundColor=UIColor.orange
-            colorView.backgroundColor=color1
-        }
-        if counter % 8 == 5{
-            //self.view.backgroundColor=UIColor.magenta
-            colorView.backgroundColor=color2
-        }
-        if counter % 8 == 6{
-            //self.view.backgroundColor=UIColor.green
-            colorView.backgroundColor=color3
-        }
-        if counter % 8 == 7{
-            //self.view.backgroundColor=UIColor.purple
-            colorView.backgroundColor=color1
-        }
-        autoTapButton()
         counter = counter + 1;
-        counter = counter % 40 //こうしたら，メモリ食わずに済む?
+        
+//        if counter % 8 == 0{
+//            colorView.backgroundColor=blue_color
+//            self.view.backgroundColor=blue_color
+//        }
+
+        //counter = counter % 40 //こうしたら，メモリ食わずに済む?
     }
     
     func autoTapButton() {
-        // 何か処理を行う
-            // ボタンタップイベントを発生させる
-            self.capturePhoto(photoButton)
+        // ボタンタップイベントを発生させる
+        self.capturePhoto(photoButton)
     }
     
     
@@ -152,8 +135,9 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         //timer = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
         //timer.fire()
         
-        colorView.backgroundColor = red_color
-        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
+        //colorView.backgroundColor = red_color
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
+        timer.fire()
         //timer = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
         
         //counter = counter + 1;
