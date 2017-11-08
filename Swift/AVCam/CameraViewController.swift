@@ -28,7 +28,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     let purple2_color    = UIColor(red: 1.0, green: 0, blue: 1.0, alpha: 0.5) //purple2_color
     let purple3_color    = UIColor(red: 1.0, green: 0, blue: 1.0, alpha: 0.2) //purple3_color
     
-    lazy var colorArray: [UIColor] = [black_color, white_color, red_color, green_color, blue_color,
+    lazy var colorArray: [UIColor] = [white_color, black_color, red_color, green_color, blue_color,
                                       cyan_color, magenta_color, yellow_color]
     
     @IBOutlet weak var colorView: UIView!
@@ -109,9 +109,10 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
             }
         }
         if counter >= 9 && counter < 17{
+            Thread.sleep(forTimeInterval: 0.1)
             autoTapButton() //この時だけ写真撮る．
         }
-        counter = counter + 1;
+        //counter = counter + 1;
         
         
 //        if counter % 8 == 0{
@@ -121,6 +122,24 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
 
         //counter = counter % 40 //こうしたら，メモリ食わずに済む?
     }
+    
+    @objc func update2(tm: Timer) {
+        // do something
+        let i_mod8 = counter % 8
+        self.colorView.backgroundColor=self.colorArray[i_mod8]
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            if self.counter >= 8 && self.counter < 16{
+                UIScreen.main.brightness = CGFloat(1.0)
+                self.autoTapButton()
+            }
+            if self.counter == 16{
+                UIScreen.main.brightness = CGFloat(0.0)
+                self.autoTapButton()
+            }
+        }
+        counter = counter + 1;
+    }
+    
     
     func autoTapButton() {
         // ボタンタップイベントを発生させる
@@ -133,12 +152,20 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         
         ////
         //super.viewWillAppear(true)
-        //timer = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
-        //timer.fire()
+        
+        
+        ////pattern3
+        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.update2), userInfo: nil, repeats: true)
+        timer.fire()
+        ////
+        
         
         //colorView.backgroundColor = red_color
-        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
-        timer.fire()
+       
+        //colorView.backgroundColor=colorArray[i]
+        //timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
+        //timer.fire()
+        
         //timer = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
         
         //counter = counter + 1;
@@ -185,7 +212,71 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
                     }
 			}
 		}
-	}
+        //viewwillappearの最後．
+        /*pattern2
+        Thread.sleep(forTimeInterval: 1.0)
+        for i in 0..<8 {
+            colorView.backgroundColor=colorArray[i]
+            Thread.sleep(forTimeInterval: 0.3)
+            autoTapButton()
+            Thread.sleep(forTimeInterval: 0.7)
+        }
+         */
+        
+        
+        /*patern1
+        //Thread.sleep(forTimeInterval: 0.5)
+        var counter_mod8 = 0
+        while counter < 100{
+        counter_mod8 = counter % 8
+        
+        //Thread.sleep(forTimeInterval: 0.3)
+        var i_time = 0.5
+        DispatchQueue.main.asyncAfter(deadline: .now() + i_time) {
+            self.colorView.backgroundColor=self.colorArray[counter_mod8]
+            if self.counter < 8{
+                self.autoTapButton()
+                print("shatter")
+            }
+        }
+        //Thread.sleep(forTimeInterval: 0.7)
+        counter += 1
+        }
+        */
+        
+        /*pattern4
+        for i in 0..<100 {
+            let i_time:Double = Double(2.0) * Double(i) + Double(0.5)
+            let i_mod8 = i % 8
+            DispatchQueue.main.asyncAfter(deadline: .now() + i_time) {
+                self.colorView.backgroundColor=self.colorArray[i_mod8]
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + i_time + 0.5) {
+            if i<8{
+                self.autoTapButton()
+                }
+            }
+        }
+         */
+        
+        /*
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        self.colorView.backgroundColor=self.colorArray[0]
+        self.autoTapButton()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.colorView.backgroundColor=self.colorArray[1]
+            self.autoTapButton()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            self.colorView.backgroundColor=self.colorArray[2]
+            self.autoTapButton()
+        }
+        */
+        
+        
+        
+	} //end viewwillappear
     
     
 	
@@ -633,7 +724,8 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
             }
             
             if self.videoDeviceInput.device.isFlashAvailable {
-                photoSettings.flashMode = .auto
+                ////photoSettings.flashMode = .auto
+                photoSettings.flashMode = .off
             }
             
 			photoSettings.isHighResolutionPhotoEnabled = true
